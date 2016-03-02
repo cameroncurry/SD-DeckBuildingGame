@@ -21,7 +21,12 @@ if __name__ == '__main__':
         p1.populateHand()
         computer.populateHand()
 
+        initGame()
+
 
         x = userStringInput("Play another game?", ['Y','N'])
         if x == 'N':
             game = False
+
+def initGame():
+    print 'initing game'
