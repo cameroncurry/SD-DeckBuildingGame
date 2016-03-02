@@ -92,11 +92,11 @@ if __name__ == '__main__':
         print central['supplement'][0]
 
 
-    pG = userStringInput('Do you want to play a game? Y or N', ['Y','N'])
+    pG = view_userStringInput('Do you want to play a game? Y or N', ['Y','N'])
     cG = (pG=='Y')
 
     if(cG):
-        oT = userStringInput("Do you want an aggressive (A) opponent or an acquisative (Q) opponent?",['A','Q'])
+        oT = view_userStringInput("Do you want an aggressive (A) opponent or an acquisative (Q) opponent?",['A','Q'])
         aggressive = (oT=='A')
 
     while cG:
