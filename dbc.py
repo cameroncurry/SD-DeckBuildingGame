@@ -1,12 +1,19 @@
 import itertools, random
-from Cards import *
 
+from Cards import *
+from Players import *
+from dbcview import *
+from cbd import *
 
 if __name__ == '__main__':
+
     pO = {'name': 'player one', 'health': 30, 'deck': None, 'hand': None, 'active': None, 'handsize': 5,
                  'discard': None}
+
     pC = {'name': 'player computer', 'health': 30, 'deck': None, 'hand': None, 'active': None, 'handsize': 5,
                'discard': None}
+
+
     central = {'name': 'central', 'active': None, 'activeSize': 5, 'supplement': None, 'deck': None}
 
     sdc = [
@@ -26,11 +33,13 @@ if __name__ == '__main__':
 
     playeronedeck = [8*[Serf()],2*[Squire()]]
 
+
     pod = list(itertools.chain.from_iterable(playeronedeck))
     pO['deck'] = pod
     pO['hand'] = []
     pO['discard'] = []
     pO['active'] = []
+
 
     playertwodeck = [8*[Serf()], 2*[Squire()]]
 
@@ -47,6 +56,7 @@ if __name__ == '__main__':
     central['supplement'] = supplement
     central['active'] = []
 
+    #populate central active
     max = central['activeSize']
     count = 0
     while count < max:
@@ -54,11 +64,14 @@ if __name__ == '__main__':
         central['active'].append(card)
         count = count + 1
 
+
+    #player.populateHand
     for x in range(0, pO['handsize']):
         if (len(pO['deck']) == 0):
             random.shuffle(pO['discard'])
             pO['deck'] = pO['discard']
             pO['discard'] = []
+
         card = pO['deck'].pop()
         pO['hand'].append(card)
 
@@ -79,10 +92,13 @@ if __name__ == '__main__':
         print central['supplement'][0]
 
 
-    pG = raw_input('Do you want to play a game?:')
+    pG = userStringInput('Do you want to play a game? Y or N', ['Y','N'])
     cG = (pG=='Y')
-    oT = raw_input("Do you want an aggressive (A) opponent or an acquisative (Q) opponent")
-    aggressive = (oT=='A')
+
+    if(cG):
+        oT = userStringInput("Do you want an aggressive (A) opponent or an acquisative (Q) opponent?",['A','Q'])
+        aggressive = (oT=='A')
+
     while cG:
         money = 0
         attack = 0
@@ -374,7 +390,7 @@ if __name__ == '__main__':
                 pC['active'] = []
 
                 supplement = 10*[Levy()]
-                
+
                 deck = list(itertools.chain.from_iterable(sdc))
                 random.shuffle(deck)
                 central['deck'] = deck
