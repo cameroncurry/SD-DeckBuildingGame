@@ -91,12 +91,13 @@ if __name__ == '__main__':
     if len(central['supplement']) > 0:
         print central['supplement'][0]
 
+    view = DBCView()
 
-    pG = view_userStringInput('Do you want to play a game? Y or N', ['Y','N'])
+    pG = view.userStringInput('Do you want to play a game? Y or N', ['Y','N'])
     cG = (pG=='Y')
 
     if(cG):
-        oT = view_userStringInput("Do you want an aggressive (A) opponent or an acquisative (Q) opponent?",['A','Q'])
+        oT = view.userStringInput("Do you want an aggressive (A) opponent or an acquisative (Q) opponent?",['A','Q'])
         aggressive = (oT=='A')
 
     while cG:
@@ -228,6 +229,8 @@ if __name__ == '__main__':
 
         print "\nPlayer Health %s" % pO['health']
         print "Computer Health %s" % pC['health']
+
+        '''COMPUTER STARTS HERE'''
 
         money = 0
         attack = 0

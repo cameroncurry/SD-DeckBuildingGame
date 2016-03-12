@@ -1,7 +1,7 @@
-import itertools, random
+import itertools, random, numpy as np
 from Cards import *
 
-class Player:
+class Player(object):
 
     def __init__(self,name):
         self.name = name
@@ -13,6 +13,9 @@ class Player:
         self.discard = []
         self.money = 0
         self.attack = 0
+
+    def move(self):
+        pass
 
     def populateHand(self):
         for i in range(0,self.handsize):
@@ -88,6 +91,52 @@ class Player:
         else:
             return 1
 
+
+class User(Player):
+    def move(self, computer, central, view):
+        makingMove = True
+
+        while makingMove:
+            view.displayTurn(self,computer)
+            cardOptions = [str(i) for i in np.arange(len(self.hand))]
+            action = view.userStringInput('Enter Action:',['P','B','A','E','Q'] + cardOptions)
+
+            if action == 'P':
+                self.playAll()
+
+            elif action.isdigit():
+                self.playCard(int(action))
+
+            elif action == 'B':
+                buying = True
+                while buying:
+                    view.displayBuyOptions(central)
+                    buyOptions = [str(i) for i in np.arange(len(central.active))]
+                    buyAction = view.userStringInput('Choose Option:',buyOptions+['S','E'])
+
+                    if buyAction == 'E':
+                        buying = False
+
+                    elif buyAction == 'S':
+                        supp_id = self.buySupplement(central)
+                        view.showSupplementResult(supp_id)
+
+                    elif buyAction.isdigit():
+                        buy_id = self.buyCard(central,int(buyAction))
+                        view.showBuyResult(buy_id)
+
+            elif action == 'A':
+                attackValue = self.willAttack()
+                computer.beenAttacked(attackValue)
+
+            elif action == 'E':
+                self.endTurn()
+                makingMove = False
+
+            elif action == 'Q':
+                return False
+
+        return True
 
 
 class Central(object):

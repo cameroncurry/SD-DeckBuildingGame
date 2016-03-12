@@ -2,78 +2,66 @@
 import numpy as np
 from Cards import *
 from Players import *
+from Computer import *
 from dbcview import *
-from dbcmodel import *
 
 if __name__ == '__main__':
-    #newgame = True if view_userStringInput("Do you want to play a game? Y or N", ['Y','N']) == 'Y' else False
+
+    view = DBCView()
+
+    #newgame = True if view.userStringInput("Do you want to play a game? Y or N", ['Y','N']) == 'Y' else False
     newgame = True
 
     '''Repeat Game loop'''
     while(newgame):
 
-        print 'playing game'
-        #opp = view_userStringInput("Do you want an aggressive (A) opponent or an acquisative (Q) opponent?",['A','Q'])
+
+        #opp = view.userStringInput("Do you want an aggressive (A) opponent or an acquisative (Q) opponent?",['A','Q'])
         opp = 'A'
 
-        p1 = Player("Player 1")
+        p1 = User("Player 1")
         p1.populateHand()
 
-        computer = Player("Computer")
+        computer = Computer(True)
         computer.populateHand()
 
         central = Central()
         central.populatedActive()
 
+
         '''main game loop'''
         game = True
         while game:
-            '''player 1 turn'''
-            playerTurn = True
-            while playerTurn:
-                view_displayTurn(p1,computer)
+            '''player 1 turn - returns false if quitting the game'''
+            game = p1.move(computer,central,view)
 
-                cardOptions = [str(i) for i in np.arange(len(p1.hand))]
-                action = view_userStringInput('Enter Action:',['P','B','A','E','Q'] + cardOptions)
+            '''proceed only if user has not quit the game'''
+            if game == True:
+                computer.move(p1,central,view)
 
-                if action == 'P':
-                    p1.playAll()
-
-                elif action.isdigit():
-                    p1.playCard(int(action))
-
-                elif action == 'B':
-                    buying = True
-                    while buying:
-                        view_displayBuyOptions(central)
-                        buyOptions = [str(i) for i in np.arange(len(central.active))]
-                        buyAction = view_userStringInput('Choose Option:',buyOptions+['S','E'])
-
-                        if buyAction == 'E':
-                            buying = False
-
-                        elif buyAction == 'S':
-                            supp_id = p1.buySupplement(central)
-                            view_showSupplementResult(supp_id)
-
-                        elif buyAction.isdigit():
-                            buy_id = p1.buyCard(central,int(buyAction))
-                            view_showBuyResult(buy_id)
-
-                elif action == 'A':
-                    attackValue = p1.willAttack()
-                    computer.beenAttacked(attackValue)
-
-                elif action == 'E':
-                    p1.endTurn()
-                    playerTurn = False
-
-                elif action == 'Q':
-                    playerTurn = False
+                if p1.health <= 0:
                     game = False
+                    print "Computer wins"
+                elif computer.health <= 0:
+                    game = False
+                    print 'Player One Wins'
 
+                elif central.activeSize == 0:
+                    print "No more cards available"
+                    if p1.health > computer.health:
+                        print "Player One Wins on Health"
+                    elif computer.health > p1.health:
+                        print "Computer Wins"
+                    else:
+                        pHT = 0
+                        pCT = 0
+                        if pHT > pCT:
+                            print "Player One Wins on Card Strength"
+                        elif pCT > pHT:
+                            print "Computer Wins on Card Strength"
+                        else:
+                            print "Draw"
 
-
-        x = view_userStringInput("Play another game?", ['Y','N'])
-        if x == 'N':
+        x = view.userStringInput("Play another game?", ['Y','N','Q'])
+        if x == 'N' or x == 'Q':
             newgame = False
