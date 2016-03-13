@@ -162,6 +162,6 @@ class Central(object):
                     ]))
         random.shuffle(self.deck)
 
-    def populatedActive(self):
+    def populateActive(self):
         for i in range(0,self.activeSize):
             self.active.append(self.deck.pop())

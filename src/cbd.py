@@ -12,12 +12,8 @@ if __name__ == '__main__':
     #newgame = True if view.userStringInput("Do you want to play a game? Y or N", ['Y','N']) == 'Y' else False
     newgame = True
 
-    print "hello\rhi"
-    
-
     '''Repeat Game loop'''
     while(newgame):
-
 
         #opp = view.userStringInput("Do you want an aggressive (A) opponent or an acquisative (Q) opponent?",['A','Q'])
         opp = 'A'
@@ -29,7 +25,7 @@ if __name__ == '__main__':
         computer.populateHand()
 
         central = Central()
-        central.populatedActive()
+        central.populateActive()
 
 
         '''main game loop'''
@@ -40,14 +36,18 @@ if __name__ == '__main__':
 
             '''proceed only if user has not quit the game'''
             if game == True:
+
+                '''check if user won before computer moves'''
+                if computer.health <= 0:
+                    game = False
+                    view.displayWinner(p1)
+
                 computer.move(p1,central,view)
 
+                '''check if computer won or draw'''
                 if p1.health <= 0:
                     game = False
-                    print "Computer wins"
-                elif computer.health <= 0:
-                    game = False
-                    print 'Player One Wins'
+                    view.displayWinner(computer)
 
                 elif central.activeSize == 0:
                     print "No more cards available"

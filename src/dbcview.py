@@ -18,21 +18,24 @@ class DBCView:
 
         print "\n\t\t\t%s Health: %d\n\t\t\t%s Health: %d"%(P1.name,P1.health,P2.name,P2.health)
 
-        print "\n\t\tHand", "\t\t\t   Active Area"
-        print "\t\t" + len("Hand")*"-", "\t\t\t   " + len("Active Area")*"-"
+        print "\n",15*" ","Hand",27*" ","Active Area"
+        print 15*" ",len("Hand")*"-",27*" ",len("Active Area")*"-"
 
-        print 5*" "+"Name\tAttack\tMoney", "\t\tName\t\tAttack\tMoney"
+        card_properties = 5*" " + "Name" + 9*" " + "Attack" + 3*" " + "Money"
+        print card_properties,5*" ",card_properties
 
-        for i in range(0, max(len(P1.hand), len(P1.active))):
-            if(i<len(P1.hand)):
+        for i in range(0, max(len(P1.hand),len(P1.active))):
+            if i < len(P1.hand):
                 card = P1.hand[i]
-                print " [%d] %s\t  %s\t  %s"%(i,card.name,card.get_attack(),card.get_money()),
+                namelen = len(card.name)
+                print " [%d]"%i, card.name, (13-namelen)*" ", card.get_attack(), 6*" ", card.get_money(),
             else:
-                print "\t\t\t",
+                print 30*" ",
 
-            if(i<len(P1.active)):
+            if i < len(P1.active):
                 card = P1.active[i]
-                print "\t\t%s \t\t  %s\t  %s"%(card.name,card.get_attack(),card.get_money())
+                namelen = len(card.name)
+                print 12*" ",card.name,(13-namelen)*" ",card.get_attack(),6*" ",card.get_money()
             else:
                 print
 
@@ -71,4 +74,7 @@ class DBCView:
             print "\n\nInsufficient money to buy"
 
     def showComputerActions(self,prompt):
-        print "\n\t\t"+prompt+""
+        print "\n\t\t"+prompt
+
+    def displayWinner(self,player):
+        print "\n\n"+player.name+" Wins"
