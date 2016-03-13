@@ -99,7 +99,8 @@ class User(Player):
         while makingMove:
             view.displayTurn(self,computer)
             cardOptions = [str(i) for i in np.arange(len(self.hand))]
-            action = view.userStringInput('Enter Action:',['P','B','A','E','Q'] + cardOptions)
+            prompt="\nChoose Action:\nP = play all, [0-n] = play that card\nB = Buy Card, A = Attack\nE = end turn, Q = quit game"
+            action = view.userStringInput(prompt+'\nEnter Action:',['P','B','A','E','Q'] + cardOptions)
 
             if action == 'P':
                 self.playAll()
@@ -110,7 +111,7 @@ class User(Player):
             elif action == 'B':
                 buying = True
                 while buying:
-                    view.displayBuyOptions(central)
+                    view.displayBuyOptions(central,self)
                     buyOptions = [str(i) for i in np.arange(len(central.active))]
                     buyAction = view.userStringInput('Choose Option:',buyOptions+['S','E'])
 

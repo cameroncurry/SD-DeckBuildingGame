@@ -12,6 +12,9 @@ if __name__ == '__main__':
     #newgame = True if view.userStringInput("Do you want to play a game? Y or N", ['Y','N']) == 'Y' else False
     newgame = True
 
+    print "hello\rhi"
+    
+
     '''Repeat Game loop'''
     while(newgame):
 

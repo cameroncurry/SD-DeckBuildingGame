@@ -1,3 +1,4 @@
+from time import sleep
 from Players import *
 
 class Computer(Player):
@@ -8,22 +9,23 @@ class Computer(Player):
 
     def move(self,player,central,view):
 
+        view.displayTurn(self,player)
+        sleep(0.5)
         self.playAll()
+        view.displayTurn(self,player)
+        sleep(0.5)
 
-        print " Computer player values attack %s, money %s" % (self.attack,self.money)
-        print " Computer attacking with strength %s" % self.attack
+
+        view.showComputerActions("Computer attacking with strength %s" % self.attack)
+        sleep(0.25)
+
         attackValue = self.willAttack()
         player.beenAttacked(attackValue)
 
-        print "\nPlayer Health %s" % player.health
-        print "Computer Health %s" % self.health
-        print " Computer player values attack %s, money %s" % (self.attack, self.money)
-        print "Computer buying"
-
+        view.showComputerActions("Computing Buying Cards")
 
         if self.money > 0:
             cb = True
-            print "Starting Money %s and cb %s " % (self.money, cb)
             while cb:
                 templist = []
                 if len(central.supplement) > 0:
@@ -49,19 +51,20 @@ class Computer(Player):
                     if source in range(0,5):
                         buy_id = self.buyCard(central,int(source))
                         if buy_id == 0:
-                            print "Computer bought card"
+                            view.showComputerActions("Computer Bought Card")
+                            sleep(0.2)
                     else:
                         supp_id = self.buySupplement(central)
                         if supp_id == 0:
-                            print 'Supplement Bought'
+                            view.showComputerActions("Supplement Bought")
+                            sleep(0.2)
 
                 else:
                     cb = False
                 if self.money == 0:
                     cb = False
-        else:
-            print "No Money to buy anything"
 
 
-        print "Computer turn ending"
+        view.showComputerActions("Computer Turn Ending")
         self.endTurn()
+        sleep(1)
