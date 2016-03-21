@@ -1,5 +1,5 @@
 from time import sleep
-from Players import *
+from Player import *
 
 class Computer(Player):
 
@@ -7,6 +7,8 @@ class Computer(Player):
         super(Computer,self).__init__("Computer")
         self.aggressive = aggressive
 
+
+    '''Computer game logic implemented here'''
     def move(self,player,central,view):
 
         view.displayTurn(self,player)

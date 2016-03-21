@@ -1,5 +1,13 @@
-
+'''View class'''
+'''implements simple command line interface with print statements'''
 class DBCView:
+
+    def welcome(self):
+        print
+        print 3*" ","Welcome"
+        print 3*" ",len("welcome")*"-"
+
+
     def userStringInput(self,prompt, validInputs, complaint="Please Enter Valid Input:", retries=4):
         while True:
             x = raw_input(str(prompt)+"\n")
@@ -13,7 +21,7 @@ class DBCView:
     def displayTurn(self,P1,P2):
 
         plyr = "%s's Turn"%P1.name
-        print "\n\n\n%s"%plyr
+        print "\n\n%s"%plyr
         print len(plyr)*"-"
 
         print "\n\t\t\t%s Health: %d\n\t\t\t%s Health: %d"%(P1.name,P1.health,P2.name,P2.health)
@@ -76,5 +84,8 @@ class DBCView:
     def showComputerActions(self,prompt):
         print "\n\t\t"+prompt
 
-    def displayWinner(self,player):
-        print "\n\n"+player.name+" Wins"
+    def displayWinner(self,player,message="Wins"):
+        if player == None:
+            print "\n\nDraw"
+        else:
+            print "\n\n",player.name,message

@@ -14,6 +14,9 @@ class Player(object):
         self.money = 0
         self.attack = 0
 
+    '''abstract move method'''
+    '''not necessarily used as subclasses require arguments to move,
+    but implemented to show that any additional Player type will be assumed to implement some move method'''
     def move(self):
         pass
 
@@ -43,6 +46,8 @@ class Player(object):
     def beenAttacked(self,attackValue):
         self.health -= attackValue
 
+    '''when ending a turn player loses accumulated money and attack
+    also discard the current hand and populates a new hand from the deck'''
     def endTurn(self):
         self.money = 0
         self.attack = 0
@@ -57,6 +62,13 @@ class Player(object):
     def discardActive(self):
         while len(self.active) > 0:
             self.discard.append(self.active.pop())
+
+    '''hand strength is the sum of attack & money values in hand'''
+    def handStrength(self):
+        strength = 0
+        for card in self.hand:
+            strength += card.get_attack + card.get_money
+        return strength
 
     '''buySupplement()
     Return 0: supplement was bought
@@ -90,78 +102,3 @@ class Player(object):
 
         else:
             return 1
-
-
-class User(Player):
-    def move(self, computer, central, view):
-        makingMove = True
-
-        while makingMove:
-            view.displayTurn(self,computer)
-            cardOptions = [str(i) for i in np.arange(len(self.hand))]
-            prompt="\nChoose Action:\nP = play all, [0-n] = play that card\nB = Buy Card, A = Attack\nE = end turn, Q = quit game"
-            action = view.userStringInput(prompt+'\nEnter Action:',['P','B','A','E','Q'] + cardOptions)
-
-            if action == 'P':
-                self.playAll()
-
-            elif action.isdigit():
-                self.playCard(int(action))
-
-            elif action == 'B':
-                buying = True
-                while buying:
-                    view.displayBuyOptions(central,self)
-                    buyOptions = [str(i) for i in np.arange(len(central.active))]
-                    buyAction = view.userStringInput('Choose Option:',buyOptions+['S','E'])
-
-                    if buyAction == 'E':
-                        buying = False
-
-                    elif buyAction == 'S':
-                        supp_id = self.buySupplement(central)
-                        view.showSupplementResult(supp_id)
-
-                    elif buyAction.isdigit():
-                        buy_id = self.buyCard(central,int(buyAction))
-                        view.showBuyResult(buy_id)
-
-            elif action == 'A':
-                attackValue = self.willAttack()
-                computer.beenAttacked(attackValue)
-
-            elif action == 'E':
-                self.endTurn()
-                makingMove = False
-
-            elif action == 'Q':
-                return False
-
-        return True
-
-
-class Central(object):
-    def __init__(self):
-        self.active = []
-        self.activeSize = 5
-        self.supplement = 10*[Levy()]
-        self.deck = list(itertools.chain.from_iterable(
-                    [
-                    4*[Archer()],
-                    4*[Baker()],
-                    3*[Swordsman()],
-                    2*[Knight()],
-                    3*[Tailor()],
-                    3*[Crossbowman()],
-                    3*[Merchant()],
-                    4*[Thug()],
-                    4*[Thief()],
-                    2*[Catapault()],
-                    2*[Caravan()],
-                    2*[Assassin()]
-                    ]))
-        random.shuffle(self.deck)
-
-    def populateActive(self):
-        for i in range(0,self.activeSize):
-            self.active.append(self.deck.pop())
